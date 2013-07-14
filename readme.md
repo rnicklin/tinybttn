@@ -10,7 +10,7 @@
 
 
 
---- The rest of these files are not as important right now
+##### Other code (not as important right now)
 
 
 
