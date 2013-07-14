@@ -45,15 +45,5 @@
 	
 	
 	echo '</div>';
-
-
-
-//			$first_letter = (string)$general['member'][0];
-//
-//			if(in_array('A', array('A','E','I','O','U')))
-//				echo 'an ';
-//			else
-//				echo 'a ';
-
 ?>
 

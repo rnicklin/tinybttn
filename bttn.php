@@ -93,7 +93,7 @@
 		// Did they have a a TinyBttnID (e.g. are they a fully-registered member)?
 		if(<?php echo $tb_id; ?>){
 		
-			$.post("curl.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>', 2 : '<?php echo $_SESSION['tinybttn_id']; ?>' } )
+			$.post("bttn_result.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>', 2 : '<?php echo $_SESSION['tinybttn_id']; ?>' } )
 			.done( function(data) {
 				success: {
 				
@@ -107,7 +107,7 @@
 		// Did they have a a TinyBttnEMAIL (e.g. are they a kinda-registered member)?
 		else if(<?php echo $tb_em; ?>){
 			
-			$.post("curl.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>' } )
+			$.post("bttn_result.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>' } )
 			.done( function(data) {
 				success: {
 				
@@ -132,7 +132,7 @@
 							function(data){
 								if(data.attribute_data.TinyBttn){	// If the TinyBttn ID is in their OneID repository, then send that too
 
-									$.post("curl.php", { 1 : data.attribute_data.email.email, 2 : data.attribute_data.TinyBttn.ID } )
+									$.post("bttn_result.php", { 1 : data.attribute_data.email.email, 2 : data.attribute_data.TinyBttn.ID } )
 									.done( function(data2) {
 										success: {
 										
@@ -143,7 +143,7 @@
 								}
 								else {	// If they only have an email in their OneID repository, then just send it
 								
-									$.post("curl.php", { 1 : data.attribute_data.email.email } )
+									$.post("bttn_result.php", { 1 : data.attribute_data.email.email } )
 									.done( function(data2) {
 										success: {
 										
