@@ -2,6 +2,9 @@
 
 The code for the Magento module.
 
+[CONSOLIDATED](./consolidated.php)	Most of the supporting functions in one place (check this out first)
+
+
 [Bttn Result](./bttn_result.php)	The main code body ... receives a OneID-provided input, posts data to TinyBttn, and handles result
 
 [Bttn](./bttn.php)	The main interface page ... determines whether or not to request OneID credentials, posts data to `Bttn_Result.php`

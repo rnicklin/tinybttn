@@ -1,5 +1,6 @@
 <?php
 	
+	// An attempt to put all the supporting functions into one place
 	
 	
 	// Function to convert the JSON-decoded object from stdClass
@@ -193,11 +194,4 @@
 			$rule->save();
 	  }
 	}
-	
-	
-	
-	
-	
-	
-	
 ?>
