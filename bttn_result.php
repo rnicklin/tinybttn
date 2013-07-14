@@ -81,7 +81,7 @@
 		
 			// Set initial values
 			$general_discount = 0;
-			$limit = null;
+			$limit = 0;
 			$free_ship = 0;
 	      
 			foreach ($general_discounts as $gd){
@@ -104,7 +104,7 @@
 					
 					
 					// Limit explanation:  if a shopper is limited to $50 of savings and the discount_amt is 10%, then they'll only reach the limit if their subtotal is > $500.  To determine this $500 value, we simply take the dollar limit and divide by the % discount (e.g. $50/0.1 = $500 )
-					if(!empty($gd['discount_limit']))
+					if(!empty($gd['discount_limit']) && $general_discount != 0)
 					    $limit = $gd['discount_limit'] / $general_discount;
 		       }
 		   }

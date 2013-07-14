@@ -4,10 +4,13 @@ The code for the Magento module.
 
 [CONSOLIDATED](./consolidated.php)	Most of the supporting functions in one place (check this out first)
 
-
 [Bttn Result](./bttn_result.php)	The main code body ... receives a OneID-provided input, posts data to TinyBttn, and handles result
 
 [Bttn](./bttn.php)	The main interface page ... determines whether or not to request OneID credentials, posts data to `Bttn_Result.php`
+
+--- The rest of these files are not as important right now
+
+
 
 [Catalog Sync](./catalog_sync.php)	The code to sync the Magento product catalog with TinyBttn
 
@@ -19,4 +22,4 @@ The code for the Magento module.
 
 [Support](./support.php)	Common code, mostly the CURL function
 
-[Trasx](./trnsx.php)	The code to correctly get/format data after an order is complete and post it to TinyBttn
+[Trnsx](./trnsx.php)	The code to correctly get/format data after an order is complete and post it to TinyBttn
