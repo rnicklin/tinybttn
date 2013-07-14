@@ -2,7 +2,7 @@
 
 // This file contains the two principle discount creation functions.
 
-
+// This function creates SKU-specific Shopping Cart Rules
 public function createProductDiscount($sku, $discount = 0, $max = null, $step = 0, $free_ship = 0, $id = null) {
   if ($id != null $discount != 0){
     $rule = Mage::getModel('salesrule/rule');
@@ -60,8 +60,8 @@ public function createProductDiscount($sku, $discount = 0, $max = null, $step = 
 
 
 
-
-public function createGeneralDiscount($discount = 0, $limit = null, $free_ship = 0, $id = null, $title = '') {
+// This function creates applicable-to-the-whole-cart Shopping Cart Rules (usually just one, but if there's a upper-limit to savings, then it needs to create two (see note).
+public function createGeneralDiscount($discount = 0, $limit = 0, $free_ship = 0, $id = null, $title = '') {
   if ($id != null $discount != 0){ 
 	$rule = Mage::getModel('salesrule/rule');
 	$customer_groups = array(0, 1, 2, 3);
@@ -88,11 +88,11 @@ public function createGeneralDiscount($discount = 0, $limit = null, $free_ship =
 	  ->setWebsiteIds(array(1));
  
       
-      // If there is a discount limit, then we need to:
+      // NOTE: If there is a discount limit, then we need to:
       //	1. Add a condition to the first rule such that it only applies if the subtotal is < limit
       //	2. Create a second rule that is simply the discount limit if subtotal is > limit
       
-	if (!is_null($limit)){
+	if ($limit !== 0)){
 	
 		// *************************************************** Add the conditions to the first rule
 		$item_found = Mage::getModel('salesrule/rule_condition_product_found')

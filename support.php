@@ -72,18 +72,4 @@
 				return 'Something went wrong';							// Unexpected error was returned, output string
 		}	
 	}
-	
-	// Load the cached for data
-	if(file_exists('tinybttn.form')) {
-		$cached_data = file_get_contents('tinybttn.form');
-		$cached_data = unserialize($cached_data);
-	}
-		else {	
-		$cached_data = post_to_tinybttn(DISCOUNT_API_ENDPOINT, '2');		// ... this also happens every six hours...
-	
-		// Write data to disk
-		$to_write = serialize($cached_data);
-		file_put_contents('tinybttn.form', $to_write, 0);	
-	}
-
 ?>
