@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	
 	// Get TinyBttnID out of session
 	$tinybttn_id = $_SESSION['tinybttn_id']
