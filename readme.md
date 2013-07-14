@@ -1,6 +1,6 @@
 ## TinyBttn
 
-This repository contains the code for the Magento code.
+The code for the Magento module.
 
 [Bttn Result](./bttn_result.php)	The main code body ... receives a OneID-provided input, posts data to TinyBttn, and handles result
 
