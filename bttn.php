@@ -55,32 +55,24 @@
 <body style="font-family: arial; font-size: small;">
 
 
-
-
-
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="https://api.oneid.com/js/includeexternal.js" type="text/javascript"></script>
 <script src="https://api.oneid.com/form/form.js" type="text/javascript"></script>
 
 
-
-
-
-
-<button class="tinybttn" onclick="getTinyBttnDiscounts()">TinyBttn</button> Freedom from the coupon code!
-
+<!-- The javascript to determine if OneID needs to be called to get the user's credentials !-->
 <script type="text/javascript">
 
 	<?php 
 	
-		// Not the clenest, but check for what credentials the user does/does not have in the current session (will be used in the Javascript
+		// I tried using the session variable in the logic directly in the javascript but the js seems to need hard '1' or '0' values,
+		//  so used php to generate the correctly value explicitly then echo $tb_id and $tb_em in the javascript
 		if(empty($_SESSION['tinybttn_id']))
 			$tb_id = '0';
 		else 
 			$tb_id = '1';
 			
-		if(empty($_SESSION['tinybttn_id']))
+		if(empty($_SESSION['tinybttn_email']))
 			$tb_em = '0';
 		else
 			$tb_em = '1';
@@ -104,7 +96,7 @@
 
 		}
 		
-		// Did they have a a TinyBttnEMAIL (e.g. are they a kinda-registered member)?
+		// Did they have a a TinyBttnEMAIL (e.g. are they a member who hasn't completed full registration)?
 		else if(<?php echo $tb_em; ?>){
 			
 			$.post("bttn_result.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>' } )
@@ -161,7 +153,10 @@
 
 </script>
 	<div id="wrapper">
-        <div id="response"></div>
-    </div>
+		<button class="tinybttn" onclick="getTinyBttnDiscounts()">TinyBttn</button>
+		<span class="slogan"></span>
+		<p>
+	</div>
+    <div id="response"></div>
 </body>
 </html>

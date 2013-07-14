@@ -1,6 +1,6 @@
 <?php
 
-// This file contains the two principle discount creation functions.
+// This file contains the two discount creation functions.
 
 // This function creates SKU-specific Shopping Cart Rules
 public function createProductDiscount($sku, $discount = 0, $max = null, $step = 0, $free_ship = 0, $id = null) {
