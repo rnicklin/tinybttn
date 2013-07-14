@@ -8,6 +8,7 @@
 		    // ... clear out identifying info and force them to re-submit their identifying info using OneID
 		    $_SESSION['tinybttn_id'] = null;
 		    $_SESSION['tinybttn_email'] = null;
+			$_SESSION['tinybttn_discounts'] = array();
 		    
 	    }
 	}
@@ -67,15 +68,15 @@
 	
 		// I tried using the session variable in the logic directly in the javascript but the js seems to need hard '1' or '0' values,
 		//  so used php to generate the correctly value explicitly then echo $tb_id and $tb_em in the javascript
-		if(empty($_SESSION['tinybttn_id']))
-			$tb_id = '0';
-		else 
+		if(isset($_SESSION['tinybttn_id']))
 			$tb_id = '1';
+		else 
+			$tb_id = '0';
 			
-		if(empty($_SESSION['tinybttn_email']))
-			$tb_em = '0';
-		else
+		if(isset($_SESSION['tinybttn_email']))
 			$tb_em = '1';
+		else
+			$tb_em = '0';
 	?>
 
 	function getTinyBttnDiscounts(){
