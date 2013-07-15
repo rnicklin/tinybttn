@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <tabs>
+        <TinyBttn translate="label" module="TinyBttn">
+            <label>TinyBttn</label>
+            <sort_order>300</sort_order>
+        </TinyBttn>
+    </tabs>
+    <sections>
+        <TinyBttn translate="label" module="TinyBttn">
+            <label>TinyBttn</label>
+            <tab>TinyBttn</tab>
+            <show_in_default>1</show_in_default>
+            <groups>
+                <endpoint translate="label">
+                    <label>API Endpoints</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <catalog translate="label">
+                            <label>Catalog API Endpoint</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </catalog>
+                        <discount translate="label">
+                            <label>Discount API Endpoint</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </discount>
+                        <transaction translate="label">
+                            <label>Transaction API Endpoint</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </transaction>
+                    </fields>
+                </endpoint>
+                <TinyBttn_authentication>
+                    <label>TinyBttn Authentication</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <api_id translate="label">
+                            <label>API ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_id>
+                        <api_pass translate="label">
+                            <label>API Pass</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_pass>
+                        <api_key translate="label">
+                            <label>API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_key>
+                    </fields>
+                </TinyBttn_authentication>                
+            </groups>
+        </TinyBttn>
+    </sections>
+</config>
