@@ -64,7 +64,7 @@
 	// If necessary, post data to the API and write the response to disk
 	if ($changes !== null){
 
-		$response = $this->post_to_tinybttn($changes);
+		$response = Mage::helper("TinyBttn")->post_to_tinybttn('catalog', null, $changes);
 
 		// Error handling.  This prevents an error message from being written into rallyribbon.sync; this would
 		//  disrupt the next run of the code (since the error message would be compared against the product catalog).

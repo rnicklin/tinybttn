@@ -1,24 +1,25 @@
 <?php
-	session_start();
+
+	$session = Mage::getSingleton('customer/session');
 	
 	// If it's been greater than 10 minutes since the user queried the API ...
-    if(isset($_SESSION['tinybttn_last_post'])){
-	    if($_SESSION['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 10){
+    if(isset($session['tinybttn_last_post'])){
+	    if($session['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 10){
 		    
 		    // ... clear out identifying info and force them to re-submit their identifying info using OneID
-		    $_SESSION['tinybttn_id'] = null;
-		    $_SESSION['tinybttn_email'] = null;
-			$_SESSION['tinybttn_discounts'] = array();
+		    $session['tinybttn_id'] = null;
+		    $session['tinybttn_email'] = null;
+			$session['tinybttn_discounts'] = array();
 		    
 	    }
 	}
 	
-	if(isset($_SESSION['tinybttn_id']))
+	if(isset($session['tinybttn_id']))
 		$tb_id = '1';
 	else 
 		$tb_id = '0';
 		
-	if(isset($_SESSION['tinybttn_email']))
+	if(isset($session['tinybttn_email']))
 		$tb_em = '1';
 	else
 		$tb_em = '0';

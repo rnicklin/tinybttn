@@ -2,7 +2,8 @@
 	session_start();
 	
 	// Get TinyBttnID out of session
-	$tinybttn_id = $_SESSION['tinybttn_id']
+	$session = Mage::getSingleton('customer/session');
+	$tinybttn_id = $session['tinybttn_id']
 
 	if($tinybttn_id !== null){
 	
@@ -33,7 +34,7 @@
 		// Encode into JWT using the API_SECRET
 		$jwt = JWT::encode($pay, $api_secret);
 	
-		post_to_tinybttn(TRANSACTION_API_ENDPOINT, null, $jwt);
+		Mage::helper("TinyBttn")->post_to_tinybttn('transaction', null, $jwt);
 	}
 	
 ?>

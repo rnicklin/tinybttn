@@ -4,26 +4,26 @@
 	//   A) determines if enough time has elapsed to warrant re-contacting the TinyBttn API
 	//   B) uses the results returned from TinyBttn to build discounts
 
-	session_start();
-	require('support.php');
-	
+	$session = Mage::getSingleton('customer/session');
+
+
 	// Store user's OneID-shared info into session variable ... this enables the logic 
 	//  that determines whether or not to show the OneID prompt when the user initially clicks the TinyBttn
-	$_SESSION['tinybttn_email'] = $_POST['1'];
-	$_SESSION['tinybttn_id']    = $_POST['2'];
+	$session['tinybttn_email'] = $_POST['1'];
+	$session['tinybttn_id']    = $_POST['2'];
 	
 	// Encode posted data into JSON
     $to_send = json_encode($_POST);
 
     // Check if TinyBttn has been contacted in the past five minutes (limits comms with the API)
-    if(isset($_SESSION['tinybttn_last_post'])){
+    if(isset($session['tinybttn_last_post'])){
 	    
 	    // If it's been greater than 5 minutes
-	    if($_SESSION['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 5){
+	    if($session['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 5){
 		    
 		    // POST data to TinyBttn, save discount information in the session, and log the current time
-		    $_SESSION['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
-		    $_SESSION['tinybttn_last_post'] = new Datetime('now');
+		    $session['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
+		    $session['tinybttn_last_post'] = new Datetime('now');
 		    
 	    }
     }
@@ -31,21 +31,21 @@
     // User hasn't yet contacted the API yet ==> POST data to TinyBttn, save discount info in the session, log current time
     else{
 		// POST data to TinyBttn and save discount information in the session
-		$_SESSION['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
-		$_SESSION['tinybttn_last_post'] = new Datetime('now');
+		$session['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
+		$session['tinybttn_last_post'] = new Datetime('now');
 	}
 	
 	
 	// ************************* Interpret results!
 	
-	if(!is_array($_SESSION['tinybttn_discounts']))	// Only successful calls return an array, so if not an array, echo the error
-		echo $_SESSION['tinybttn_discounts'];				
+	if(!is_array($session['tinybttn_discounts']))	// Only successful calls return an array, so if not an array, echo the error
+		echo $session['tinybttn_discounts'];				
 	
 	else{
 	
 		// Get the two result arrays
-		$product_discounts = $_SESSION['tinybttn_discounts']['product'];
-		$general_discounts = $_SESSION['tinybttn_discounts']['general'];
+		$product_discounts = $session['tinybttn_discounts']['product'];
+		$general_discounts = $session['tinybttn_discounts']['general'];
 		
 
 		if(!empty($product_discounts)){
