@@ -12,6 +12,16 @@
 		    
 	    }
 	}
+	
+	if(isset($_SESSION['tinybttn_id']))
+		$tb_id = '1';
+	else 
+		$tb_id = '0';
+		
+	if(isset($_SESSION['tinybttn_email']))
+		$tb_em = '1';
+	else
+		$tb_em = '0';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -65,19 +75,6 @@
 
 <!-- The javascript to determine if OneID needs to be called to get the user's credentials !-->
 <script type="text/javascript">
-
-	<?php 
-		if(isset($_SESSION['tinybttn_id']))
-			$tb_id = '1';
-		else 
-			$tb_id = '0';
-			
-		if(isset($_SESSION['tinybttn_email']))
-			$tb_em = '1';
-		else
-			$tb_em = '0';
-	?>
-
 	function getTinyBttnDiscounts(){
 		if(<?php echo $tb_id; ?>){
 			$.post("bttn_result.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>', 2 : '<?php echo $_SESSION['tinybttn_id']; ?>' } )
