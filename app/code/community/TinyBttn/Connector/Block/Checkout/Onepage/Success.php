@@ -67,9 +67,12 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 			// Build the appropriate JSON object
 			$payload = json_encode(array("order_id" => $order_id, "tinybttn_id" => $tinybttn_id, "items" => $trnsx_items));
 
-			// Encode into JWT using the API_SECRET
-			$jwt = JWT::encode($pay, $api_secret);
 
+			$tinybttn_api_key = Mage::helper("TinyBttn")->getApiKey();
+			
+			// Encode into JWT using the API_SECRET
+			$jwt = JWT::encode($pay, $tinybttn_api_key);
+			
 			Mage::helper("TinyBttn")->post_to_tinybttn('transaction', null, $jwt);
 		}
 
