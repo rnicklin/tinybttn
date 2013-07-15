@@ -22,7 +22,7 @@
 	    if($_SESSION['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 5){
 		    
 		    // POST data to TinyBttn, save discount information in the session, and log the current time
-		    $_SESSION['tinybttn_discounts'] = post_to_tinybttn(DISCOUNT_API_ENDPOINT, '1', $to_send);
+		    $_SESSION['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
 		    $_SESSION['tinybttn_last_post'] = new Datetime('now');
 		    
 	    }
@@ -31,7 +31,7 @@
     // User hasn't yet contacted the API yet ==> POST data to TinyBttn, save discount info in the session, log current time
     else{
 		// POST data to TinyBttn and save discount information in the session
-		$_SESSION['tinybttn_discounts'] = post_to_tinybttn(DISCOUNT_API_ENDPOINT, '1', $to_send);
+		$_SESSION['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
 		$_SESSION['tinybttn_last_post'] = new Datetime('now');
 	}
 	
@@ -70,7 +70,7 @@
 					$ps_id = 'TBPS-' . $product_discounts[$sku]['ps_id'] . '-' . $sku . '-' . rand(100000, 999999);
 					
 					// Call the creation function(sku, discount, qty_max, qty_step, free_ship, name)
-					createProductDiscount($sku, $product_discounts[$sku]['amt'], $product_discounts[$sku]['qty_max'], $product_discounts[$sku]['qty_step'], $product_discounts[$sku]['free_ship'], $ps_id);
+					Mage::helper("TinyBttn")->createProductDiscount($sku, $product_discounts[$sku]['amt'], $product_discounts[$sku]['qty_max'], $product_discounts[$sku]['qty_step'], $product_discounts[$sku]['free_ship'], $ps_id);
 				}
 			}
 		}
@@ -111,6 +111,6 @@
 	   }
 	   
 	   if($general_discount > 0)
-			createGeneralDiscount($general_discount, $limit, $free_ship, $gen_id, $title);
+			Mage::helper("TinyBttn")->createGeneralDiscount($general_discount, $limit, $free_ship, $gen_id, $title);
 	 }
 ?>
