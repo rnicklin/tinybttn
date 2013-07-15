@@ -75,7 +75,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
         $tinybttn_api_pass = $this->getApiPass();
 		$tinybttn_api_key = $this->getApiKey();
 		
-		// Set the correct endpoint, depending on the nature of the request
+		// Set the correct endpoint, depending on the function call
 		switch ($endpoint) {
 			case 'catalog':
 				$tinybttn_endpoint = $this->getCatalogEndPoint();
@@ -128,7 +128,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	// This function creates SKU-specific Shopping Cart Rules
 	public function createProductDiscount($sku, $discount = 0, $max = null, $step = 0, $free_ship = 0, $id = null) {
-	  if ($id != null || $discount != 0){
+	  if ($id != null && $discount != 0){
 	    $rule = Mage::getModel('salesrule/rule');
 	    $customer_groups = array(0, 1, 2, 3);
 	    $rule->setName($id)
@@ -186,7 +186,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	// This function creates applicable-to-the-whole-cart Shopping Cart Rules (usually just one, but if there's a upper-limit to savings, then it needs to create two (see note).
 	public function createGeneralDiscount($discount = 0, $limit = 0, $free_ship = 0, $id = null, $title = '') {
-	  if ($id != null || $discount != 0){ 
+	  if ($id != null && $discount != 0){ 
 		$rule = Mage::getModel('salesrule/rule');
 		$customer_groups = array(0, 1, 2, 3);
 		$rule->setName($id . rand(100000, 999999))	// We add on the randomized six digits here

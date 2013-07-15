@@ -22,6 +22,8 @@
 <title>TinyBttn Demo</title>
 </head>
 
+
+<!-- CSS for the button !-->
 <style type="text/css">
 .tinybttn {
 	-moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
@@ -56,7 +58,7 @@
 <body style="font-family: arial; font-size: small;">
 
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="https://api.oneid.com/js/includeexternal.js" type="text/javascript"></script>
 <script src="https://api.oneid.com/form/form.js" type="text/javascript"></script>
 
@@ -65,9 +67,6 @@
 <script type="text/javascript">
 
 	<?php 
-	
-		// I tried using the session variable in the logic directly in the javascript but the js seems to need hard '1' or '0' values,
-		//  so used php to generate the correctly value explicitly then echo $tb_id and $tb_em in the javascript
 		if(isset($_SESSION['tinybttn_id']))
 			$tb_id = '1';
 		else 
@@ -80,38 +79,14 @@
 	?>
 
 	function getTinyBttnDiscounts(){
-		
-		// *** If the user aleady has OneID-provided data in the session, then don't prompt them to share via OneID again
-		
-		// Did they have a a TinyBttnID (e.g. are they a fully-registered member)?
 		if(<?php echo $tb_id; ?>){
-		
 			$.post("bttn_result.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>', 2 : '<?php echo $_SESSION['tinybttn_id']; ?>' } )
-			.done( function(data) {
-				success: {
-				
-					document.getElementById('response').innerHTML=data;
-					$(".tinybttn").hide();
-					}
-			});
-
 		}
 		
-		// Did they have a a TinyBttnEMAIL (e.g. are they a member who hasn't completed full registration)?
 		else if(<?php echo $tb_em; ?>){
-			
 			$.post("bttn_result.php", { 1 : '<?php echo $_SESSION['tinybttn_email']; ?>' } )
-			.done( function(data) {
-				success: {
-				
-					document.getElementById('response').innerHTML=data;
-					$(".tinybttn").hide();
-					}
-			});
-			
 		}
-		
-		// *** The user is either NOT a member -or- they have not shared their details using OneID
+
 		else{
 				OneIdExtern.registerApiReadyFunction(
 					function(){
@@ -123,27 +98,11 @@
 								forceSelectCards:false
 							},
 							function(data){
-								if(data.attribute_data.TinyBttn){	// If the TinyBttn ID is in their OneID repository, then send that too
-
+								if(data.attribute_data.TinyBttn){
 									$.post("bttn_result.php", { 1 : data.attribute_data.email.email, 2 : data.attribute_data.TinyBttn.ID } )
-									.done( function(data2) {
-										success: {
-										
-											document.getElementById('response').innerHTML=data2;
-											$(".tinybttn").hide();
-											}
-									});
 								}
-								else {	// If they only have an email in their OneID repository, then just send it
-								
+								else {
 									$.post("bttn_result.php", { 1 : data.attribute_data.email.email } )
-									.done( function(data2) {
-										success: {
-										
-											document.getElementById('response').innerHTML=data2;
-											$(".tinybttn").hide();
-											}
-									});
 								}
 							}
 						);

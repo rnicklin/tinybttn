@@ -4,7 +4,7 @@
 
 // This function creates SKU-specific Shopping Cart Rules
 public function createProductDiscount($sku, $discount = 0, $max = null, $step = 0, $free_ship = 0, $id = null) {
-  if ($id != null $discount != 0){
+  if ($id != null && $discount != 0){
     $rule = Mage::getModel('salesrule/rule');
     $customer_groups = array(0, 1, 2, 3);
     $rule->setName($id)
@@ -62,7 +62,7 @@ public function createProductDiscount($sku, $discount = 0, $max = null, $step = 
 
 // This function creates applicable-to-the-whole-cart Shopping Cart Rules (usually just one, but if there's a upper-limit to savings, then it needs to create two (see note).
 public function createGeneralDiscount($discount = 0, $limit = 0, $free_ship = 0, $id = null, $title = '') {
-  if ($id != null $discount != 0){ 
+  if ($id != null && $discount != 0){ 
 	$rule = Mage::getModel('salesrule/rule');
 	$customer_groups = array(0, 1, 2, 3);
 	$rule->setName($id . rand(100000, 999999))	// We add on the randomized six digits here
