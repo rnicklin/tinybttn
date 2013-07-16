@@ -132,7 +132,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 	    $rule = Mage::getModel('salesrule/rule');
 	    $customer_groups = array(0, 1, 2, 3);
 	    $rule->setName($id)
-	      ->setDescription($id)
+	      ->setDescription($id . rand(100000, 999999))
 	      ->setFromDate('')
 	      ->setCouponType(2)
 	      ->setCouponCode(Mage::helper('core')->getRandomString(16))

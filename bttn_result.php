@@ -59,7 +59,13 @@
 			    $item_sku = $item->getSku();
 			    array_push($users_skus, $item_sku);
 			}
-
+			
+			// We need to allow the user to click the button multiple times (in case they add a new product that qualifies for
+			//  a discount after the initial click), *BUT* if we don't keep track of the rules we've already built, then
+			//  we'll start creating duplicates!
+			if(!isset($session['existing_ps_ids'])
+				 $session['existing_ps_ids'] = array();	// Instantiate as an array if not previously set
+			
 			// See if there's a discount that matches an item in the cart (based on SKU)
 			foreach($users_skus as $sku){
 
@@ -67,10 +73,17 @@
 				if(array_key_exists($sku, $product_discounts)){	// The $product_discounts array's keys are product SKUs
 				
 					// Create the unique rule ame that will be sent back to TinyBttn if/when the user completes checkout
-					$ps_id = 'TBPS-' . $product_discounts[$sku]['ps_id'] . '-' . $sku . '-' . rand(100000, 999999);
+					$ps_id = 'TBPS-' . $product_discounts[$sku]['ps_id'] . '-' . $sku . '-';
 					
-					// Call the creation function(sku, discount, qty_max, qty_step, free_ship, name)
-					Mage::helper("TinyBttn")->createProductDiscount($sku, $product_discounts[$sku]['amt'], $product_discounts[$sku]['qty_max'], $product_discounts[$sku]['qty_step'], $product_discounts[$sku]['free_ship'], $ps_id);
+					
+					// If we haven't already built this rule ...
+					if(!in_array($ps_id, $session['existing_ps_ids'])){
+						// ... call the creation function
+						Mage::helper("TinyBttn")->createProductDiscount($sku, $product_discounts[$sku]['amt'], $product_discounts[$sku]['qty_max'], $product_discounts[$sku]['qty_step'], $product_discounts[$sku]['free_ship'], $ps_id);
+					
+						// Add the rule we just built into our array of existing rules in order to close the logic loop
+						array_push($session['existing_ps_ids'], $ps_id);
+					}
 				}
 			}
 		}
@@ -110,7 +123,13 @@
 		   }
 	   }
 	   
-	   if($general_discount > 0)
+		// For products, we've addressed the concern about duplicating discount rules by maintaining an array of previously-built rules
+		//  For the general discount, since there's only one, we just need a boolean "Has one been applied?"
+		$session['general_applied'] = 0;
+	   
+		if($general_discount > 0){
 			Mage::helper("TinyBttn")->createGeneralDiscount($general_discount, $limit, $free_ship, $gen_id, $title);
+			$session['general_applied'] = 1;
+		}
 	 }
 ?>
