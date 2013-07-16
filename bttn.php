@@ -10,7 +10,6 @@
 		    $session['tinybttn_id'] = null;
 		    $session['tinybttn_email'] = null;
 			$session['tinybttn_discounts'] = array();
-		    
 	    }
 	}
 	

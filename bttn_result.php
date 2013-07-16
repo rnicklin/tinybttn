@@ -9,7 +9,7 @@
 	// We need to allow the user to click the button multiple times (in case they add a new product that qualifies for
 	//  a discount after the initial click), *BUT* if we don't keep track of the rules we've already built, then
 	//  we'll start creating duplicates.
-	// SO => instantiate an array to track ... this will also be used to later remove (upon checkout) them
+	// SO => instantiate an array to track ... this will also be used to later remove them (upon checkout)
 	if(!isset($session['tinybttn_created'])
 		 $session['tinybttn_created'] = array();	// Instantiate as an array if not previously set ... have to check isset
 													// so that we don't overwrite existing
@@ -29,23 +29,9 @@
 	    // If it's been greater than 5 minutes
 	    if($session['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 5){
 			
-			// Delete all existing Cart Rules!
-			foreach($session['tinybttn_created'] as $rule_id){
-				
-				$model = Mage::getModel('salesrule/rule')
-				        ->getCollection()
-				        ->addFieldToFilter('name', array('eq'=>$rule_id))
-				        ->getFirstItem();
-				
-				$model->delete();
-				
-				unset($session['tinybttn_created'][$rule_id]);	// Remove the rule from the array
-			}
-			
 		    // POST data to TinyBttn, save discount information in the session, and log the current time
 		    $session['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
 		    $session['tinybttn_last_post'] = new Datetime('now');
-		    
 	    }
     }
     
@@ -87,7 +73,7 @@
 				// If the item has a matching discount, build it
 				if(array_key_exists($sku, $product_discounts)){	// The $product_discounts array's keys are product SKUs
 				
-					// Create the unique rule ame that will be sent back to TinyBttn if/when the user completes checkout
+					// Create the unique ID that will be sent back to TinyBttn if/when the user completes checkout
 					$ps_id = 'TBPS-' . $product_discounts[$sku]['ps_id'] . '-' . $sku . '-';
 					
 					// If we haven't already built a rule using this SKU ...
