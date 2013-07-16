@@ -3,7 +3,7 @@
 #### The code for the Magento module.
 
 ##### First Priority: 
-##### Draw button & Create Discounts when needed
+####### Draw button, Create Discounts when needed, POST details of a completed order
 
  - [Bttn](./bttn.php) Front-end code: determines whether or not to request OneID credentials, posts data to bttn_result.php
 
@@ -13,7 +13,7 @@
 
 
 ##### Second priority:
-##### Have this code run whenever API / Authorization data is saved (in Admin config) and also every 30 minutes (chron)
+####### Have this code run whenever API / Authorization data is saved (in Admin config) and also every 30 minutes (chron)
 
  - [Catalog Sync](./catalog_sync.php)	The code to sync the Magento product catalog with TinyBttn
  
