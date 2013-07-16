@@ -9,9 +9,6 @@
 
  - [Bttn Result](./bttn_result.php)	Back-end code: receives credentials, posts data to TinyBttn, and handles the results
 
- - [Trnsx](./trnsx.php)	The code to correctly get/format data after an order is complete and post it to TinyBttn
-
-
 ##### Second priority:
 ####### Have this code run whenever API / Authorization data is saved (in Admin config) and also every 30 minutes (chron)
 
