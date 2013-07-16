@@ -34,9 +34,9 @@
 				
 				// <<<< DELETE THE CART RULE BY ID ... THIS SAME CODE SHOULD BE USED IN THE SUCCESS.PHP AREA >>
 				
+				$session['tinybttn_created'] = array(); // null out the array
 			}
 			
-		    
 		    // POST data to TinyBttn, save discount information in the session, and log the current time
 		    $session['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
 		    $session['tinybttn_last_post'] = new Datetime('now');
