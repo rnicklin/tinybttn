@@ -74,13 +74,19 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 			
 			Mage::helper("TinyBttn")->post_to_tinybttn('transaction', null, $jwt);
 			
-			foreach($session['tinybttn_created'] as $cart_rule){
+			// Delete all existing Cart Rules!
+			foreach($session['tinybttn_created'] as $rule_id){
 				
-				// <<<< DELETE $cart_rule ... THIS SAME CODE SHOULD BE USED IN BTTN_RESULT.PHP AREA >>
+				$model = Mage::getModel('salesrule/rule')
+				        ->getCollection()
+				        ->addFieldToFilter('name', array('eq'=>$rule_id))
+				        ->getFirstItem();
 				
-				$session['tinybttn_created'] = array(); // null out the array
+				$model->delete();
 				
+				unset($session['tinybttn_created'][$rule_id]);	// Remove the rule from the array
 			}
+
 		}
 
 		return Mage::getModel("sales/order")->loadByIncrementId($order_id);  

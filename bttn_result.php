@@ -30,11 +30,16 @@
 	    if($session['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 5){
 			
 			// Delete all existing Cart Rules!
-			foreach($session['tinybttn_created'] as $cart_rule){
+			foreach($session['tinybttn_created'] as $rule_id){
 				
-				// <<<< DELETE $cart_rule ... THIS SAME CODE SHOULD BE USED IN THE SUCCESS.PHP AREA >>
+				$model = Mage::getModel('salesrule/rule')
+				        ->getCollection()
+				        ->addFieldToFilter('name', array('eq'=>$rule_id))
+				        ->getFirstItem();
 				
-				$session['tinybttn_created'] = array(); // null out the array
+				$model->delete();
+				
+				unset($session['tinybttn_created'][$rule_id]);	// Remove the rule from the array
 			}
 			
 		    // POST data to TinyBttn, save discount information in the session, and log the current time
