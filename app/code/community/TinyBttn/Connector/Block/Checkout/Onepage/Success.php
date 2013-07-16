@@ -76,7 +76,9 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 			
 			foreach($session['tinybttn_created'] as $cart_rule){
 				
-				// <<<< DELETE THE CART RULE BY ID ... THIS SAME CODE SHOULD BE USED IN BTTN_RESULT.PHP AREA >>
+				// <<<< DELETE $cart_rule ... THIS SAME CODE SHOULD BE USED IN BTTN_RESULT.PHP AREA >>
+				
+				$session['tinybttn_created'] = array(); // null out the array
 				
 			}
 		}
