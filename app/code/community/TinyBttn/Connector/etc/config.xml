@@ -79,7 +79,7 @@
             <TinyBttn_authentication>
                 <api_id><![CDATA[api_id]]></api_id>
 				<api_pass><![CDATA[api_pass]]></api_pass>
-                <api_key><![CDATA[api_key]]></api_key>
+                <api_secret><![CDATA[api_secret]]></api_secret>
             </TinyBttn_authentication>
         </TinyBttn>
     </default>
