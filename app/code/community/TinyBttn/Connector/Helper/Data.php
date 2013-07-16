@@ -219,11 +219,23 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 		if ($limit !== 0)){
 	
 			// *************************************************** Add the conditions to the first rule
-			// << NEED CODE FOR CONDITION BASED ON SUBTOTAL >>
+			$conditions = array(
+				"1" => array(
+					"type" => "salesrule/rule_condition_combine",
+					"aggregator" => "all",
+					"value" => "1",
+					"new_child" => null
+					),
+				"1--1" => array(
+					"type" => "salesrule/rule_condition_address",
+					"attribute" => "base_subtotal",
+					"operator" => "<",
+					"value" => $limit
+					)
+				);
 		
-			$rule->getActions()->addCondition($actions);
-			$rule->save();
-		
+			$rule->setData("conditions", $conditions);
+			$rule->save();		
 		
 			// *************************************************** Create the Second Rule the fixed amount for subtotal > limit
 			$rule2 = Mage::getModel('salesrule/rule');
@@ -242,7 +254,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 			  ->setProductIds('')
 			  ->setSortOrder(0)
 			  ->setSimpleAction('cart_fixed')			// Verify this ... by_fixed versus cart_fixed??
-			  ->setDiscountAmount($discount*100)
+			  ->setDiscountAmount($limit)
 			  ->setSimpleFreeShipping($free_ship)		// This originally had quotes like '0'
 			  ->setApplyToShipping('0')
 			  ->setIsRss(0)
@@ -250,9 +262,22 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 			  ->setWebsiteIds(array(1));
 		  
 			// *************************************************** Add the conditions to the second rule  
-			// << NEED CODE FOR CONDITION BASED ON SUBTOTAL >>
+			$conditions = array(
+				"1" => array(
+					"type" => "salesrule/rule_condition_combine",
+					"aggregator" => "all",
+					"value" => "1",
+					"new_child" => null
+					),
+				"1--1" => array(
+					"type" => "salesrule/rule_condition_address",
+					"attribute" => "base_subtotal",
+					"operator" => ">=",
+					"value" => $limit
+					)
+				);
 		
-			$rule2->getActions()->addCondition($actions);
+			$rule->setData("conditions", $conditions);
 			$rule2->save();
 		}
 	
