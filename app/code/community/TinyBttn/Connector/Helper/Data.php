@@ -226,9 +226,9 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
       
 	      // NOTE: If there is a discount limit, then we need to:
 	      //	1. Add a condition to the first rule such that it only applies if the subtotal is < limit
-	      //	2. Create a second rule that gives a fixed discount (the limit value) if subtotal is > limit
+	      //	2. Create a second rule that gives a fixed discount (the limit value) if subtotal is >= limit
       
-		if ($limit !== 0)){
+		if ($limit != 0)){
 	
 			// *************************************************** Add the conditions to the first rule
 			$conditions = array(
@@ -293,7 +293,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 					)
 				);
 		
-			$rule->setData("conditions", $conditions);
+			$rule2->setData("conditions", $conditions);
 			$rule2->save();
 		}
 	

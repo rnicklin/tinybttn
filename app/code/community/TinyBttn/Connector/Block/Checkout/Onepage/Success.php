@@ -45,6 +45,9 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 		$order_id = $this->getOrderId();
 
 		if($tinybttn_id != null){
+			
+			// Require the library to encode the JSON Web Token (JWT)
+			require("jwt.php");
 
 			// Load the order using its id
 			$order = Mage::getModel('sales/order')
