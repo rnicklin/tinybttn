@@ -44,7 +44,7 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 		// Get the just-completed OrderID
 		$order_id = $this->getOrderId();
 
-		if($tinybttn_id != null){
+		if(isset($tinybttn_id)){
 			
 			// Require the library to encode the JSON Web Token (JWT)
 			require("jwt.php");
@@ -59,12 +59,11 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 			// Put details into correct format for API
 			$trnsx_items = array();
 			foreach ($order_items as $itemId => $item) {
-    
-				$purch_item->sku = $item->getSku();
-			    $purch_item->qty = $item->getQtyToInvoice();
-				$purch_item->price = $item->getPrice();
-	
-				array_push($trnsx_items, $purch_item);
+    			
+				$trnsx_items[$item->getSku()] = array(
+													$item->getQtyToInvoice(),
+													$item->getPrice()
+												);
 			}
 
 			// Build the appropriate JSON object
