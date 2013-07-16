@@ -3,4 +3,16 @@
 <layout version="0.1.0">
     <default>
     </default>
+
+    <checkout_cart_index>
+        <reference name="checkout.cart.coupon">
+            <action method="setTemplate"><template>TinyBttn/checkout/cart/coupon.phtml</template></action>
+            <block type="TinyBttn/Bttn" name="TinyBttn.Bttn" as="Bttn" template="TinyBttn/Bttn.phtml"/>
+            <!--<block type="core/text_list" name="checkout.cart.extra">
+                <block type="TinyBttn/Bttn" name="TinyBttn.Bttn" as="Bttn" template="TinyBttn/Bttn.phtml"/>
+            </block>
+            <block type="checkout/cart_coupon" name="checkout.cart.coupon" as="coupon" template="checkout/cart/coupon.phtml"/>-->
+
+        </reference>
+    </checkout_cart_index>
 </layout>

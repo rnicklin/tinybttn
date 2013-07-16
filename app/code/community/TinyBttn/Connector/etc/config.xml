@@ -62,9 +62,9 @@
         </routers>
         <layout>
             <updates>
-                <TinyBttnconnector>
+                <TinyBttn>
                     <file>TinyBttn.xml</file>
-                </TinyBttnconnector>
+                </TinyBttn>
             </updates>
         </layout>
     </frontend>
