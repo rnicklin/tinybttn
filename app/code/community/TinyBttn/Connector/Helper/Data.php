@@ -127,12 +127,18 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 	
 	// This function creates SKU-specific Shopping Cart Rules
-	public function createProductDiscount($sku, $discount = 0, $max = null, $step = 0, $free_ship = 0, $id = null) {
+	public function createProductDiscount($sku, $discount = 0, $max = null, $step = 0, $free_ship = 0, $id = null) {	  
 	  if ($id != null && $discount != 0){
+		
+		$id = $id . rand(100000, 999999);	// Create the unique identifier by adding a random digit onto the base TinyBttn format
+
+		$session = Mage::getSingleton('customer/session');
+		array_push($session['tinybttn_created'], $id);				// Add this specific $id into the session "Used" variable
+		
 	    $rule = Mage::getModel('salesrule/rule');
 	    $customer_groups = array(0, 1, 2, 3);
 	    $rule->setName($id)
-	      ->setDescription($id . rand(100000, 999999))
+	      ->setDescription($id)
 	      ->setFromDate('')
 	      ->setCouponType(2)
 	      ->setCouponCode(Mage::helper('core')->getRandomString(16))
@@ -186,11 +192,17 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	// This function creates applicable-to-the-whole-cart Shopping Cart Rules (usually just one, but if there's a upper-limit to savings, then it needs to create two (see note).
 	public function createGeneralDiscount($discount = 0, $limit = 0, $free_ship = 0, $id = null, $title = '') {
-	  if ($id != null && $discount != 0){ 
+	  if ($id != null && $discount != 0){
+		
+  		$id_lower = $id . rand(100000, 999999);	// Create the unique identifier by adding a random digit onto the base TinyBttn format
+
+  		$session = Mage::getSingleton('customer/session');
+  		array_push($session['tinybttn_created'], $id_lower);			// Add this specific $id into the session "Used" variable
+
 		$rule = Mage::getModel('salesrule/rule');
 		$customer_groups = array(0, 1, 2, 3);
-		$rule->setName($id . rand(100000, 999999))	// We add on the randomized six digits here
-		  ->setDescription($id)
+		$rule->setName($id_lower)
+		  ->setDescription($id_lower)
 		  ->setFromDate('')
 		  ->setCouponType(2)
 		  ->setCouponCode(Mage::helper('core')->getRandomString(16))
@@ -238,9 +250,13 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 			$rule->save();		
 		
 			// *************************************************** Create the Second Rule the fixed amount for subtotal > limit
+			
+	  		$id_upper = $id . rand(100000, 999999);	// Create another unique identifier for this rule
+	  		array_push($session['tinybttn_created'], $id_upper);		// Add this specific $id into the session "Used" variable
+
 			$rule2 = Mage::getModel('salesrule/rule');
-			$rule2->setName($id . rand(100000, 999999))
-			  ->setDescription($id)
+			$rule2->setName($id_upper)
+			  ->setDescription($id_upper)
 			  ->setFromDate('')
 			  ->setCouponType(2)
 			  ->setCouponCode(Mage::helper('core')->getRandomString(16))

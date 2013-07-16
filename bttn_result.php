@@ -5,6 +5,14 @@
 	//   B) uses the results returned from TinyBttn to build discounts
 
 	$session = Mage::getSingleton('customer/session');
+	
+	// We need to allow the user to click the button multiple times (in case they add a new product that qualifies for
+	//  a discount after the initial click), *BUT* if we don't keep track of the rules we've already built, then
+	//  we'll start creating duplicates.
+	// SO => instantiate an array to track ... this will also be used to later remove (upon checkout) them
+	if(!isset($session['tinybttn_created'])
+		 $session['tinybttn_created'] = array();	// Instantiate as an array if not previously set ... have to check isset
+													// so that we don't overwrite existing
 
 
 	// Store user's OneID-shared info into session variable ... this enables the logic 
@@ -20,6 +28,14 @@
 	    
 	    // If it's been greater than 5 minutes
 	    if($session['tinybttn_last_post']->diff(new Datetime('now'))->format("%i") > 5){
+			
+			// Delete all existing Cart Rules!
+			foreach($session['tinybttn_created'] as $cart_rule){
+				
+				// <<<< DELETE THE CART RULE BY ID ... THIS SAME CODE SHOULD BE USED IN THE SUCCESS.PHP AREA >>
+				
+			}
+			
 		    
 		    // POST data to TinyBttn, save discount information in the session, and log the current time
 		    $session['tinybttn_discounts'] = Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send);
@@ -38,17 +54,17 @@
 	
 	// ************************* Interpret results!
 	
-	if(!is_array($session['tinybttn_discounts']))	// Only successful calls return an array, so if not an array, echo the error
-		echo $session['tinybttn_discounts'];				
-	
-	else{
+	if(is_array($session['tinybttn_discounts'])) {
 	
 		// Get the two result arrays
 		$product_discounts = $session['tinybttn_discounts']['product'];
 		$general_discounts = $session['tinybttn_discounts']['general'];
 		
-
 		if(!empty($product_discounts)){
+			
+			// Unfortunately, each Shopping Cart Rule has to have a unique ID, so we can't use that as a means to track in here
+			if(!isset($session['tinybttn_used_skus'])
+				 $session['tinybttn_used_skus'] = array();	// Instantiate as an array if not previously set
 			
 			// Load the shopper's current cart
 			$items = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
@@ -60,12 +76,6 @@
 			    array_push($users_skus, $item_sku);
 			}
 			
-			// We need to allow the user to click the button multiple times (in case they add a new product that qualifies for
-			//  a discount after the initial click), *BUT* if we don't keep track of the rules we've already built, then
-			//  we'll start creating duplicates!
-			if(!isset($session['existing_ps_ids'])
-				 $session['existing_ps_ids'] = array();	// Instantiate as an array if not previously set
-			
 			// See if there's a discount that matches an item in the cart (based on SKU)
 			foreach($users_skus as $sku){
 
@@ -75,14 +85,13 @@
 					// Create the unique rule ame that will be sent back to TinyBttn if/when the user completes checkout
 					$ps_id = 'TBPS-' . $product_discounts[$sku]['ps_id'] . '-' . $sku . '-';
 					
-					
-					// If we haven't already built this rule ...
-					if(!in_array($ps_id, $session['existing_ps_ids'])){
+					// If we haven't already built a rule using this SKU ...
+					if(!in_array($sku, $session['tinybttn_used_skus'])){
 						// ... call the creation function
 						Mage::helper("TinyBttn")->createProductDiscount($sku, $product_discounts[$sku]['amt'], $product_discounts[$sku]['qty_max'], $product_discounts[$sku]['qty_step'], $product_discounts[$sku]['free_ship'], $ps_id);
 					
-						// Add the rule we just built into our array of existing rules in order to close the logic loop
-						array_push($session['existing_ps_ids'], $ps_id);
+						// Add the SKU into our array of used SKUs in order to close the logic loop
+						array_push($session['tinybttn_used_skus'], $sku);
 					}
 				}
 			}
@@ -110,7 +119,7 @@
 					
 					$gen_id = 'TBME-' . $gd['me_id'] . '-';
 					
-					if($gd['free_ship'])                		// Check for/set free_shipping
+					if($gd['free_ship'] = 't')        // Check for/set free_shipping
 						$free_ship = 1;
 					else
 						$free_ship = 0;
@@ -124,12 +133,10 @@
 	   }
 	   
 		// For products, we've addressed the concern about duplicating discount rules by maintaining an array of previously-built rules
-		//  For the general discount, since there's only one, we just need a boolean "Has one been applied?"
-		$session['general_applied'] = 0;
-	   
-		if($general_discount > 0){
+		//  For the general discount, since only one is applied, we just need an "is it set?" boolean 
+		if($general_discount > 0 && !isset($session['tinybttn_general_set'])){
 			Mage::helper("TinyBttn")->createGeneralDiscount($general_discount, $limit, $free_ship, $gen_id, $title);
-			$session['general_applied'] = 1;
+			$session['tinybttn_general_set'] = 1;
 		}
 	 }
 ?>

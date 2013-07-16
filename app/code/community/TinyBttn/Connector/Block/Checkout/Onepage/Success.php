@@ -37,14 +37,14 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 	// Get the details of the just-completed order, format into an array, and post to TinyBttn
 	public function sendOrder(){
 
-		// Get the just-completed OrderID
-		$order_id = $this->getOrderId();
-
 		// Get TinyBttnID out of session
 		$session = Mage::getSingleton('customer/session');
 		$tinybttn_id = $session['tinybttn_id']
+			
+		// Get the just-completed OrderID
+		$order_id = $this->getOrderId();
 
-		if($tinybttn_id !== null){
+		if($tinybttn_id != null){
 
 			// Load the order using its id
 			$order = Mage::getModel('sales/order')
@@ -67,13 +67,18 @@ class TinyBttn_Connector_Block_Checkout_Onepage_Success extends Mage_Checkout_Bl
 			// Build the appropriate JSON object
 			$payload = json_encode(array("order_id" => $order_id, "tinybttn_id" => $tinybttn_id, "items" => $trnsx_items));
 
-
 			$tinybttn_api_key = Mage::helper("TinyBttn")->getApiKey();
 			
 			// Encode into JWT using the API_SECRET
 			$jwt = JWT::encode($pay, $tinybttn_api_key);
 			
 			Mage::helper("TinyBttn")->post_to_tinybttn('transaction', null, $jwt);
+			
+			foreach($session['tinybttn_created'] as $cart_rule){
+				
+				// <<<< DELETE THE CART RULE BY ID ... THIS SAME CODE SHOULD BE USED IN BTTN_RESULT.PHP AREA >>
+				
+			}
 		}
 
 		return Mage::getModel("sales/order")->loadByIncrementId($order_id);  
