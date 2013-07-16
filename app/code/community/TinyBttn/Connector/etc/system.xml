@@ -70,14 +70,14 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </api_pass>
-                        <api_key translate="label">
-                            <label>API Key</label>
+                        <api_secret translate="label">
+                            <label>API Secret</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </api_key>
+                        </api_secret>
                     </fields>
                 </TinyBttn_authentication>                
             </groups>

@@ -91,6 +91,11 @@
 		
 		// If general (applied to the ENTIRE shopping cart) discounts array was returned, then we need to select the highest value one 
 		if(!empty($general_discounts)){
+			
+			// For products, we addressed the concern about duplicating rules using an array of previously-built rules
+			//  For the general discount, since we basically do the same thing
+			if(!isset($session['tinybttn_used_gen'])
+				 $session['tinybttn_used_gen'] = array();	// Instantiate as an array if not previously set
 		
 			// Set initial values
 			$general_discount = 0;
@@ -123,11 +128,16 @@
 		   }
 	   }
 	   
-		// For products, we've addressed the concern about duplicating discount rules by maintaining an array of previously-built rules
-		//  For the general discount, since only one is applied, we just need an "is it set?" boolean 
-		if($general_discount > 0 && !isset($session['tinybttn_general_set'])){
-			Mage::helper("TinyBttn")->createGeneralDiscount($general_discount, $limit, $free_ship, $gen_id, $title);
-			$session['tinybttn_general_set'] = 1;
+		if($general_discount > 0){
+			
+			if($session['tinybttn_general_set'] != $gen_id){
+				
+				if(($key = array_search("great", $james)) !== false)
+			    	unset($james[$key]);
+				
+				Mage::helper("TinyBttn")->createGeneralDiscount($general_discount, $limit, $free_ship, $gen_id, $title);
+				$session['tinybttn_general_set'] = $gen_id;
+			}
 		}
 	 }
 ?>

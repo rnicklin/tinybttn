@@ -8,7 +8,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 
     const API_ID_PATH = 'TinyBttn/TinyBttn_authentication/api_id';
 	const API_PASS_PATH = 'TinyBttn/TinyBttn_authentication/api_pass';
-    const API_KEY_PATH = 'TinyBttn/TinyBttn_authentication/api_key';
+    const API_SECRET_PATH = 'TinyBttn/TinyBttn_authentication/api_secret';
 	
     const MIN_IE_VERSION = 9.0;
     
@@ -48,8 +48,8 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
         return (string)Mage::getStoreConfig(self::API_PASS_PATH);
     }
     
-    public function getApiKey() {
-        return (string)Mage::getStoreConfig(self::API_KEY_PATH);
+    public function getApiSecret() {
+        return (string)Mage::getStoreConfig(self::API_SECRET_PATH);
     }
     
 	
@@ -73,7 +73,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 		
         $tinybttn_api_id = $this->getApiId();
         $tinybttn_api_pass = $this->getApiPass();
-		$tinybttn_api_key = $this->getApiKey();
+		$tinybttn_api_secret = $this->getApiSecret();
 		
 		// Set the correct endpoint, depending on the function call
 		switch ($endpoint) {
@@ -115,7 +115,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		// Response interpretation & error handling
 		if (substr($response, 0, 2) == 'ey')
-			return $this->objectToArray(JWT::decode($response, $tinybttn_api_key));
+			return $this->objectToArray(JWT::decode($response, $tinybttn_api_secret));
 		else {
 			if (substr($response, 2, 5) == 'error') {
 				$fail = $this->objectToArray(json_decode($response));
