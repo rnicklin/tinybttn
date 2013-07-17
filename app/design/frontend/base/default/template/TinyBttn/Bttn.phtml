@@ -15,6 +15,7 @@ $tb_id = $session->getTinybttnId() ? 1 : 0;
 $tb_em = $session->getTinybttnEmail() ? 1 : 0;
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script>jQuery.noConflict();</script>
 <script src="https://api.oneid.com/js/includeexternal.js" type="text/javascript"></script>
 <script src="https://api.oneid.com/form/form.js" type="text/javascript"></script>
 
@@ -40,6 +41,7 @@ $tb_em = $session->getTinybttnEmail() ? 1 : 0;
         padding:7px 12px;
         text-decoration:none;
         text-shadow:1px 1px 0px #cc9f52;
+        cursor:pointer;
     }.tinybttn:hover {
          background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
          background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
@@ -52,41 +54,80 @@ $tb_em = $session->getTinybttnEmail() ? 1 : 0;
 </style>
 
 <script type="text/javascript">
-    function getTinyBttnDiscounts(){
-        var post_url = '<?php echo $this->getUrl('TinyBttn/result/post'); ?>';
-
-        if(<?php echo $tb_id; ?>){
-            jQuery.post(post_url, { 1 : '<?php echo $session->getTinybttnEmail(); ?>', 2 : '<?php echo $session->getTinybttnId(); ?>' } )
-        }
-
-        else if(<?php echo $tb_em; ?>){
-            jQuery.post(post_url, { 1 : '<?php echo $session->getTinybttnEmail(); ?>' } )
-        }
-
-        else{
-            OneIdExtern.registerApiReadyFunction(
-                function(){
-                    OneId.getUserAttributes(
-                        {
-                            attr: "email[email] TinyBttn[ID]",
-                            authLevel:null,
-                            selectCards:false,
-                            forceSelectCards:false
-                        },
-                        function(data){
-                            if(data.attribute_data.TinyBttn){
-                                jQuery.post(post_url, { 1 : data.attribute_data.email.email, 2 : data.attribute_data.TinyBttn.ID } )
+    var TinyBttn = {
+        xhr: {
+            abort: function() {
+                return false;
+            }
+        },
+        post_url: '<?php echo $this->getUrl('TinyBttn/result/post'); ?>',
+        onComplete: function(data) {
+            console.log("onComplete called");
+            console.log(data);
+            //window.location.reload(true);
+        },
+        post: function() {
+            if(<?php echo $tb_id; ?>){
+                TinyBttn.xhr.abort();
+                TinyBttn.xhr = jQuery.post(
+                    TinyBttn.post_url,
+                    {
+                        1 : '<?php echo $session->getTinybttnEmail(); ?>',
+                        2 : '<?php echo $session->getTinybttnId(); ?>'
+                    }
+                ).done(function(response) {
+                    TinyBttn.onComplete(response);
+                });
+            } else if(<?php echo $tb_em; ?>){
+                TinyBttn.xhr.abort();
+                TinyBttn.xhr = jQuery.post(
+                    TinyBttn.post_url,
+                    {
+                        1 : '<?php echo $session->getTinybttnEmail(); ?>'
+                    }
+                ).done(function(response) {
+                    TinyBttn.onComplete(response);
+                });
+            } else{
+                OneIdExtern.registerApiReadyFunction(
+                    function(){
+                        OneId.getUserAttributes(
+                            {
+                                attr: "email[email] TinyBttn[ID]",
+                                authLevel:null,
+                                selectCards:false,
+                                forceSelectCards:false
+                            },
+                            function(data){
+                                if(data.attribute_data.TinyBttn){
+                                    TinyBttn.xhr.abort();
+                                    TinyBttn.xhr = jQuery.post(
+                                        TinyBttn.post_url,
+                                        {
+                                            1 : data.attribute_data.email.email,
+                                            2 : data.attribute_data.TinyBttn.ID
+                                        }
+                                    ).done(function(response) {
+                                        TinyBttn.onComplete(response);
+                                    });
+                                } else {
+                                    TinyBttn.xhr.abort();
+                                    TinyBttn.xhr = jQuery.post(
+                                        TinyBttn.post_url,
+                                        {
+                                            1 : data.attribute_data.email.email
+                                        }
+                                    ).done(function(response) {
+                                        TinyBttn.onComplete(response);
+                                    });
+                                }
                             }
-                            else {
-                                jQuery.post(post_url, { 1 : data.attribute_data.email.email } )
-                            }
-                        }
-                    );
-                }
-            );
+                        );
+                    }
+                );
+            }
         }
-    };
-
+    }
 </script>
 
-<button class="tinybttn" onclick="getTinyBttnDiscounts()">TinyBttn</button>
+<span class="tinybttn" onclick="TinyBttn.post()">TinyBttn</span>

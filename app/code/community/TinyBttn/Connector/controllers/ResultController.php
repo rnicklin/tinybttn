@@ -33,12 +33,14 @@ class TinyBttn_Connector_ResultController extends Mage_Core_Controller_Front_Act
         if($this->_getSession()->getTinybttnLastPost()){
 
             // If it's been greater than 5 minutes
-            if($this->_getSession()->getTinybttnLastPost()->diff(new Datetime('now'))->format("%i") > 5){
+            //if($this->_getSession()->getTinybttnLastPost()->diff(new Datetime('now'))->format("%i") > 5){
+
+            var_dump(Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send)); exit;
 
                 // POST data to TinyBttn, save discount information in the session, and log the current time
                 $this->_getSession()->setTinybttnDiscounts(Mage::helper("TinyBttn")->post_to_tinybttn('discount', '1', $to_send));
                 $this->_getSession()->setTinybttnLastPost(new Datetime('now'));
-            }
+            //}
         }
 
         // User hasn't yet contacted the API yet ==> POST data to TinyBttn, save discount info in the session, log current time

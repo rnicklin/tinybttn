@@ -2,9 +2,13 @@
 
 class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 
-    const CATALOG_API_ENDPOINT_PATH = 'OneID/endpoint/catalog';
-	const DISCOUNT_API_ENDPOINT_PATH = 'OneID/endpoint/discount';
-	const TRANSACTION_API_ENDPOINT_PATH = 'OneID/endpoint/transaction';
+    //const CATALOG_API_ENDPOINT_PATH = 'OneID/endpoint/catalog';
+	//const DISCOUNT_API_ENDPOINT_PATH = 'OneID/endpoint/discount';
+	//const TRANSACTION_API_ENDPOINT_PATH = 'OneID/endpoint/transaction';
+
+    const CATALOG_API_ENDPOINT_PATH = 'TinyBttn/endpoint/catalog';
+	const DISCOUNT_API_ENDPOINT_PATH = 'TinyBttn/endpoint/discount';
+	const TRANSACTION_API_ENDPOINT_PATH = 'TinyBttn/endpoint/transaction';
 
     const API_ID_PATH = 'TinyBttn/TinyBttn_authentication/api_id';
 	const API_PASS_PATH = 'TinyBttn/TinyBttn_authentication/api_pass';
@@ -69,7 +73,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function post_to_tinybttn($endpoint, $type=null, $data=null) {
 		
 		// Require the library to decode the JSON Web Token (JWT)
-		require("jwt.php");
+		require(Mage::getBaseDir('base')."/jwt.php");
 		
         $tinybttn_api_id = $this->getApiId();
         $tinybttn_api_pass = $this->getApiPass();
@@ -228,7 +232,7 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 	      //	1. Add a condition to the first rule such that it only applies if the subtotal is < limit
 	      //	2. Create a second rule that gives a fixed discount (the limit value) if subtotal is >= limit
       
-		if ($limit != 0)){
+		if ($limit != 0){
 	
 			// *************************************************** Add the conditions to the first rule
 			$conditions = array(
