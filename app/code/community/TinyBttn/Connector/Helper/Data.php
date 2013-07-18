@@ -55,19 +55,30 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
     public function getApiSecret() {
         return (string)Mage::getStoreConfig(self::API_SECRET_PATH);
     }
-    
-	
-	
-	// Function to convert the JSON-decoded object from stdClass
-	public function objectToArray($d) {
-		if (is_object($d))
-			$d = get_object_vars($d);
 
-		if (is_array($d))
-			return array_map(__FUNCTION__, $d);
-		else
-			return $d;
-	}
+
+
+	// Function to convert the JSON-decoded object from stdClass
+    public function objectToArray($d) {
+        if (is_object($d)) {
+            // Gets the properties of the given object
+            // with get_object_vars function
+            $d = get_object_vars($d);
+        }
+
+        if (is_array($d)) {
+            /*
+            * Return array converted to object
+            * Using __FUNCTION__ (Magic constant)
+            * for recursive call
+            */
+            return array_map(__FUNCTION__, $d);
+        }
+        else {
+            // Return array
+            return $d;
+        }
+    }
 
 	// The POST function
 	public function post_to_tinybttn($endpoint, $type=null, $data=null) {
@@ -118,11 +129,13 @@ class TinyBttn_Connector_Helper_Data extends Mage_Core_Helper_Abstract {
 		curl_close($ch);
 
 		// Response interpretation & error handling
-		if (substr($response, 0, 2) == 'ey')
-			return $this->objectToArray(JWT::decode($response, $tinybttn_api_secret));
-		else {
+		if (substr($response, 0, 2) == 'ey') {
+			//return $this->objectToArray(JWT::decode($response, $tinybttn_api_secret));
+			return array_map(__FUNCTION__, get_object_vars(JWT::decode($response, $tinybttn_api_secret)));
+        } else {
 			if (substr($response, 2, 5) == 'error') {
-				$fail = $this->objectToArray(json_decode($response));
+				//$fail = $this->objectToArray(json_decode($response));
+				$fail = array_map(__FUNCTION__, get_object_vars(json_decode($response)));
 				return $fail['error'];	// A proper error was returned, output string
 			}
 			else

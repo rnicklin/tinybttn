@@ -1,6 +1,8 @@
 <?php
 $session = Mage::getSingleton('customer/session');
 
+var_dump($session->getData());
+
 // If it's been greater than 10 minutes since the user queried the API ...
 if($session->getTinybttnLastPost()) {
     if($session->getTinybttnLastPost()->diff(new Datetime('now'))->format("%i") > 10) {
